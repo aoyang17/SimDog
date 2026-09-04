@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SimDog 仿真案例库：论文复现、模型校正、自动化执行与独立验收。">
+  <title>SimDog Documentation · 仿真案例库</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="主导航">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">SD</span> SimDog Docs</a>
+      <div class="nav-links">
+        <a href="#cases" aria-current="page">案例</a>
+        <a href="#method">方法</a>
+        <a href="https://github.com/aoyang17/SimDog">软件仓库</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Simulation case library</span>
+        <h1>仿真不是跑通，<br>而是建立证据。</h1>
+        <p>这里记录 SimDog 与 PaperEngine 的代表性工作：从论文方程审计、求解器搭建和自动化运行，到实验对照、失败诊断与独立验收。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#cases">浏览案例</a>
+          <a class="button" href="https://github.com/aoyang17/SimDog/blob/main/docs/architecture.md">了解架构</a>
+        </div>
+      </div>
+      <div class="hero-logo" aria-label="SimDog logo">
+        <img src="assets/simdog-logo.png" alt="SimDog">
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="cases">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Selected cases</span>
+            <h2>历史案例</h2>
+          </div>
+          <p>每个案例都保留结论边界。通过、阶段性通过和拒绝结果会被明确区分，求解器完成不等同于科学验收。</p>
+        </div>
+
+        <div class="case-grid">
+          <a class="case-card" href="cases/kobayashi-1993.html">
+            <div class="card-visual"><img src="assets/cases/kobayashi-fig7.png" alt="Kobayashi 1993 原论文与 COMSOL 枝晶形貌对比"></div>
+            <div class="card-body">
+              <div class="meta-row"><span class="status pass">已接受</span><span class="tag">论文复现</span><span class="tag">COMSOL</span></div>
+              <h3>Kobayashi 1993</h3>
+              <p>复现二维各向异性相场枝晶生长，完成五组参数扫描、稳健性分析与论文轮廓定量比较。</p>
+              <span class="card-link">查看完整案例 →</span>
+            </div>
+          </a>
+
+          <a class="case-card" href="cases/laghmach-2015.html">
+            <div class="card-visual"><img src="assets/cases/laghmach-radius.svg" alt="Laghmach 2015 晶体半径演化与论文数据对比"></div>
+            <div class="card-body">
+              <div class="meta-row"><span class="status partial">阶段性</span><span class="tag">论文复现</span><span class="tag">相场力学</span></div>
+              <h3>Laghmach 2015</h3>
+              <p>验证“拓扑约束—界面弹性带—停止生长”机制，同时公开完整有限变形求解尚未关闭的验收缺口。</p>
+              <span class="card-link">查看完整案例 →</span>
+            </div>
+          </a>
+
+          <a class="case-card" href="cases/soc-ocv-correction.html">
+            <div class="card-visual"><img src="assets/cases/distributed-ecm-profile.svg" alt="DistributedECM 均匀与非均匀阻抗下的局部倍率剖面"></div>
+            <div class="card-body">
+              <div class="meta-row"><span class="status pass">500 s 已接受</span><span class="tag">模型校正</span><span class="tag">SoC–OCV</span></div>
+              <h3>SoC–OCV 模型校正</h3>
+              <p>把不稳定的动态电压状态改写为 OCV 驱动的代数界面关系，并用均匀/非均匀阻抗实验验证局部电流与 SoC 分化。</p>
+              <span class="card-link">查看完整案例 →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft" id="method">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Evidence first</span>
+            <h2>案例记录原则</h2>
+          </div>
+          <p>案例页不是营销摘要，而是面向工程复用的可审计说明。</p>
+        </div>
+        <div class="principles">
+          <div class="principle"><strong>来源冻结</strong><span>记录论文、方程、参数和输入版本，避免目标在执行中漂移。</span></div>
+          <div class="principle"><strong>执行留痕</strong><span>记录求解器版本、运行矩阵、日志、产物与哈希。</span></div>
+          <div class="principle"><strong>门槛先行</strong><span>在看结果前声明守恒、收敛、误差和物理域约束。</span></div>
+          <div class="principle"><strong>独立复核</strong><span>Reviewer 与产出 Agent 身份隔离，并保留退回原因。</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>SimDog Documentation · Provider-neutral simulation engineering</span>
+      <span>案例数据来自已归档的 PaperEngine 与 SimDog 验证记录</span>
+    </div>
+  </footer>
+</body>
+</html>

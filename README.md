@@ -12,6 +12,8 @@
 
 SimDog 将可替换的 LLM/Agent 与确定性的工作流、求解器执行和科学验收分离。Agent 负责提出方案；只有 Workflow Controller 可以推进状态、验收产物与发布结果。
 
+历史论文复现、模型校正和验证结果收录在 [SimDog Documentation](docs/index.html)。
+
 ## 安装
 
 SimDog 需要 Python 3.10 或更高版本。

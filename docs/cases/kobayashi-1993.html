@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kobayashi 1993 各向异性枝晶生长 COMSOL 复现案例。">
+  <title>Kobayashi 1993 论文复现 · SimDog Docs</title>
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="主导航">
+    <div class="container nav-inner">
+      <a class="brand" href="../index.html"><span class="brand-mark">SD</span> SimDog Docs</a>
+      <div class="nav-links"><a href="../index.html#cases">全部案例</a><a href="https://github.com/aoyang17/SimDog/blob/main/docs/architecture.md">架构</a><a href="https://github.com/aoyang17/SimDog">软件仓库</a></div>
+    </div>
+  </nav>
+
+  <header class="case-hero">
+    <div class="container">
+      <span class="eyebrow">Paper reproduction · Accepted</span>
+      <h1>Kobayashi 1993：各向异性枝晶生长复现</h1>
+      <p>将论文相场方程逐项映射到 COMSOL General Form PDE，以五档各向异性扫描重现“各向异性增强主枝推进与四重方向选择”的核心结论。</p>
+      <div class="meta-row"><span class="status">12 / 12 验收通过</span><span class="tag">COMSOL 6.4</span><span class="tag">11 / 11 作业完成</span><span class="tag">相场模型</span></div>
+    </div>
+  </header>
+
+  <main class="container case-layout">
+    <article class="case-content">
+      <section id="outcome">
+        <h2>结论</h2>
+        <div class="callout pass"><strong>独立审查：接受。</strong> 方程翻译、执行记录、哈希链、守恒检查和全部 12 项冻结验收标准一致通过。结论支持定性形貌机制与趋势，不宣称逐像素一致或材料 SI 标定。</div>
+        <div class="metric-grid">
+          <div class="metric"><div class="value">0.3283</div><div class="label">Fig. 7 平均轮廓 IoU，门槛 ≥ 0.25</div></div>
+          <div class="metric"><div class="value">0.0262</div><div class="label">归一化 contour Chamfer，门槛 ≤ 0.10</div></div>
+          <div class="metric"><div class="value">1.8509×</div><div class="label">δ=.05 / δ=0 主枝长度比</div></div>
+        </div>
+      </section>
+
+      <section id="question">
+        <h2>复现问题</h2>
+        <p>目标论文为 R. Kobayashi, <em>Modeling and numerical simulations of dendritic crystal growth</em>, Physica D 63 (1993) 410–423。复现重点是论文 Fig. 7：四重各向异性强度 δ 是否控制枝晶主枝速度与方向选择。</p>
+        <p>模型使用相场 <code>p</code> 与温度 <code>T</code> 两个标量场。实现中固定变量顺序为 <code>[p,T]</code>，通过方向相关界面系数表达各向异性，并以潜热项耦合温度场。</p>
+      </section>
+
+      <section id="workflow">
+        <h2>执行过程</h2>
+        <ol class="workflow-list">
+          <li><strong>Research：</strong>冻结论文 PDF 哈希，定位 Eq. (3)、Eq. (5)、Fig. 7 参数和原文未报告项。</li>
+          <li><strong>Theory：</strong>按 <code>ea / da / Γ / f / g / q</code> 拆解论文方程，明确零通量边界与守恒量。</li>
+          <li><strong>Builder：</strong>用 Java API 构建两套 General Form PDE，生成可执行 MPH 模型。</li>
+          <li><strong>Automation：</strong>执行 5 档 δ、2 个无噪声对照，以及网格、时间步和晶核半径敏感性分析。</li>
+          <li><strong>Reviewer：</strong>独立核对作业状态、日志、文件哈希、焓守恒、收敛性和 Fig. 7 轮廓指标。</li>
+        </ol>
+      </section>
+
+      <section id="evidence">
+        <h2>论文与 COMSOL 对照</h2>
+        <figure class="evidence-figure">
+          <img src="../assets/cases/kobayashi-fig7.png" alt="原论文 Fig. 7 与 COMSOL 相场轮廓对比">
+          <figcaption>原论文轮廓与 COMSOL <code>p ≥ 0.5</code> 轮廓对照。比较覆盖 δ=0–0.05 和三个时刻，目标是趋势与形貌类别一致。</figcaption>
+        </figure>
+        <table>
+          <thead><tr><th>检查项</th><th>结果</th><th>验收门槛</th></tr></thead>
+          <tbody>
+            <tr><td>δ=.05 纵/横尺度比</td><td>2.0135</td><td>&gt; 1.10</td></tr>
+            <tr><td>网格主枝相对差</td><td>0.354%</td><td>≤ 5%</td></tr>
+            <tr><td>时间步主枝相对差</td><td>0.000%</td><td>≤ 5%</td></tr>
+            <tr><td>晶核半径敏感性</td><td>0.211%</td><td>≤ 15%</td></tr>
+            <tr><td>最大相对焓漂移</td><td>2.09×10⁻¹³</td><td>≤ 1%</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="limits">
+        <h2>结论边界</h2>
+        <ul>
+          <li>论文没有报告晶核半径、随机种子和噪声更新频率；复现采用公开假设、确定性噪声和无噪声对照。</li>
+          <li>计算使用论文的无量纲尺度，不能直接解释为某种具体材料的 SI 预测。</li>
+          <li>时间步主枝指标的零差异受阈值量化影响，不代表完整场完全相同。</li>
+          <li>验收支持论文所述的各向异性趋势与形貌类别，而非每个轮廓的像素级复制。</li>
+        </ul>
+      </section>
+    </article>
+
+    <aside class="case-sidebar">
+      <div class="side-card"><strong>本页导航</strong><a href="#outcome">结论</a><a href="#question">复现问题</a><a href="#workflow">执行过程</a><a href="#evidence">定量证据</a><a href="#limits">结论边界</a></div>
+      <div class="side-card"><strong>案例信息</strong><dl class="definition-list"><dt>案例类型</dt><dd>论文复现</dd><dt>求解器</dt><dd>COMSOL Multiphysics 6.4</dd><dt>模型</dt><dd>二维相场 + 热扩散</dd><dt>审查结果</dt><dd>Accepted</dd><dt>原始执行日期</dt><dd>2026-08-26</dd></dl></div>
+    </aside>
+  </main>
+
+  <footer><div class="container footer-inner"><span>SimDog Documentation</span><span><a href="../index.html">← 返回案例库</a></span></div></footer>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DistributedECM SoC–OCV 模型校正与均匀、非均匀阻抗对照实验。">
+  <title>SoC–OCV 模型校正与对照实验 · SimDog Docs</title>
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="主导航"><div class="container nav-inner"><a class="brand" href="../index.html"><span class="brand-mark">SD</span> SimDog Docs</a><div class="nav-links"><a href="../index.html#cases">全部案例</a><a href="https://github.com/aoyang17/SimDog/blob/main/docs/architecture.md">架构</a><a href="https://github.com/aoyang17/SimDog">软件仓库</a></div></div></nav>
+
+  <header class="case-hero">
+    <div class="container">
+      <span class="eyebrow">Model correction · SoC–OCV</span>
+      <h1>DistributedECM：SoC–OCV 模型校正与对照实验</h1>
+      <p>从不稳定的动态电压状态方程出发，定位代数约束错误，重构局部 SoC 演化和 OCV 界面关系，再比较均匀与非均匀阻抗下的电流、端电压和局部 SoC。</p>
+      <div class="meta-row"><span class="status">500 s 验收通过</span><span class="tag">COMSOL 6.4</span><span class="tag">60 Ah / 1C</span><span class="tag">模型 Debug</span></div>
+    </div>
+  </header>
+
+  <main class="container case-layout">
+    <article class="case-content">
+      <section id="outcome">
+        <h2>结论</h2>
+        <div class="callout pass"><strong>500 s 对照实验接受。</strong> 模型重构后电流守恒误差低于 10⁻⁶，SoC 保持在 OCV 有效域；非均匀阻抗使电流变异系数提高约 7.745 倍，并形成最高 5.153 C 的局部热点。</div>
+        <div class="metric-grid">
+          <div class="metric"><div class="value">7.745×</div><div class="label">非均匀 / 均匀电流 CV</div></div>
+          <div class="metric"><div class="value">5.153 C</div><div class="label">非均匀工况峰值局部倍率</div></div>
+          <div class="metric"><div class="value">+0.1186 V</div><div class="label">非均匀工况端电压变化</div></div>
+        </div>
+      </section>
+
+      <section id="problem">
+        <h2>原始问题</h2>
+        <p>原模型把局部电压 <code>V2</code> 当作动态状态积分，同时又要求它满足 OCV、活化极化和欧姆极化组成的代数关系。这一混合定义形成病态 DAE，在运行中出现约 ±30 kV 的非物理解。</p>
+        <p>此外，初始电势与开路状态不一致、电流瞬时加载，以及利用同一边界反力构造强 Dirichlet 约束，进一步放大了首步非线性问题。</p>
+      </section>
+
+      <section id="correction">
+        <h2>校正方法</h2>
+        <ol class="workflow-list">
+          <li><strong>冻结物理语义：</strong>Boundary ODE 只推进局部 <code>SOCb</code>，电压不再作为独立动态状态。</li>
+          <li><strong>恢复开路一致性：</strong>集流体初值与 <code>OCV(SOC₀)</code> 对齐，并使用 1 s 线性电流爬升。</li>
+          <li><strong>改写界面关系：</strong>用面积比阻抗 Robin 关系表达上下集流体电压差、OCV 与局部电流之间的代数耦合。</li>
+          <li><strong>设置对照实验：</strong>保持 60 Ah、60 A、500 s 相同，只改变阻抗因子的空间分布。</li>
+          <li><strong>域与守恒验收：</strong>同时检查积分电流、SoC ∈ [0,1]、求解器日志、产物哈希和空间统计。</li>
+        </ol>
+        <div class="callout"><strong>重构后的核心关系：</strong><br><code>∂SOCb/∂t = C_rate,local / 3600 s</code><br><code>n·J = (Vupper − Vlower − OCV(SOCb)) / Rarea</code></div>
+      </section>
+
+      <section id="evidence">
+        <h2>均匀 / 非均匀对照</h2>
+        <figure class="evidence-figure"><img src="../assets/cases/distributed-ecm-profile.svg" alt="均匀和非均匀阻抗算例的局部 C-rate 剖面对比"><figcaption>最终时刻的空间剖面。非均匀阻抗把电流集中到低阻区域，使局部倍率和 SoC 分化显著增强。</figcaption></figure>
+        <table>
+          <thead><tr><th>500 s 指标</th><th>均匀阻抗</th><th>非均匀阻抗</th></tr></thead>
+          <tbody>
+            <tr><td>积分边界电流</td><td>60.000003 A</td><td>60.000000 A</td></tr>
+            <tr><td>电流守恒相对误差</td><td>4.44×10⁻⁸</td><td>4.61×10⁻⁹</td></tr>
+            <tr><td>局部倍率范围</td><td>0.0027–1.1254 C</td><td>0.00005–5.1526 C</td></tr>
+            <tr><td>电流变异系数</td><td>0.14008</td><td>1.08489</td></tr>
+            <tr><td>端电压</td><td>3.00499 V</td><td>3.12363 V</td></tr>
+            <tr><td>局部 SoC 范围</td><td>0.00664–0.15838</td><td>0.00159–0.76993</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="rejection">
+        <h2>被拒绝的 1200 s 结果</h2>
+        <div class="callout warn">1200 s 诊断任务在数值上完成，但非均匀算例局部 SoC 最大值约为 1.97，已经超出 OCV 插值表的 [0,1] 有效域。因此该结果被明确拒绝，没有用于最终结论。</div>
+        <p>这个失败说明“求解完成”只是执行健康，不是物理可信。长期预测需要加入 SoC 上下限事件、随 SoC 重新标定阻抗，或恢复稳定的颗粒扩散和浓差动态。</p>
+      </section>
+
+      <section id="limits">
+        <h2>适用范围</h2>
+        <ul>
+          <li>这是 Distributed ECM 的模型校正与计算对照，不是针对某个实测电芯完成的参数反演。</li>
+          <li>OCV 曲线参与状态—电压反馈，但本案例没有独立拟合新的实验 OCV 曲线。</li>
+          <li>活化阻抗在 1C 工作点线性化，浓差过电位在该降阶版本中设为零。</li>
+          <li>5 C 局部热点适合用于识别风险区域，不应直接视为高倍率极化的精确预测。</li>
+        </ul>
+      </section>
+    </article>
+
+    <aside class="case-sidebar">
+      <div class="side-card"><strong>本页导航</strong><a href="#outcome">结论</a><a href="#problem">原始问题</a><a href="#correction">校正方法</a><a href="#evidence">对照结果</a><a href="#rejection">拒绝结果</a><a href="#limits">适用范围</a></div>
+      <div class="side-card"><strong>案例信息</strong><dl class="definition-list"><dt>案例类型</dt><dd>模型 Debug / 对照实验</dd><dt>求解器</dt><dd>COMSOL Multiphysics 6.4</dd><dt>模型</dt><dd>3D 集流体 + 分布式 ECM</dd><dt>审查结果</dt><dd>500 s Accepted</dd><dt>原始执行日期</dt><dd>2026-08-27</dd></dl></div>
+    </aside>
+  </main>
+
+  <footer><div class="container footer-inner"><span>SimDog Documentation</span><span><a href="../index.html">← 返回案例库</a></span></div></footer>
+</body>
+</html>

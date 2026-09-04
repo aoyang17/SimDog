@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Laghmach 2015 应变诱导晶体生长相场复现案例。">
+  <title>Laghmach 2015 阶段性论文复现 · SimDog Docs</title>
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+  <nav class="site-nav" aria-label="主导航"><div class="container nav-inner"><a class="brand" href="../index.html"><span class="brand-mark">SD</span> SimDog Docs</a><div class="nav-links"><a href="../index.html#cases">全部案例</a><a href="https://github.com/aoyang17/SimDog/blob/main/docs/architecture.md">架构</a><a href="https://github.com/aoyang17/SimDog">软件仓库</a></div></div></nav>
+
+  <header class="case-hero">
+    <div class="container">
+      <span class="eyebrow">Paper reproduction · Partial</span>
+      <h1>Laghmach 2015：应变诱导晶体生长</h1>
+      <p>复现弹性基体中晶体生长的相场模型，重点审计“拓扑约束排出—界面弹性带形成—晶体停止生长”的机制链。</p>
+      <div class="meta-row"><span class="status">17 / 22 必选指标通过</span><span class="tag">阶段性结果</span><span class="tag">相场 + 有限变形</span><span class="tag">COMSOL 6.4</span></div>
+    </div>
+  </header>
+
+  <main class="container case-layout">
+    <article class="case-content">
+      <section id="outcome">
+        <h2>结论</h2>
+        <div class="callout warn"><strong>状态：阶段性复现，不是完整成功。</strong> 约化模型已经给出核心机制的独立数值证据，COMSOL Java 模型完成编译和短时求解；完整有限变形长时矩阵仍有 5 项验收缺口。</div>
+        <div class="metric-grid">
+          <div class="metric"><div class="value">23.008 nm</div><div class="label">拓扑约束开启后的平台半径</div></div>
+          <div class="metric"><div class="value">69.49%</div><div class="label">界面弹性能重叠率，门槛 ≥ 50%</div></div>
+          <div class="metric"><div class="value">6.06%</div><div class="label">论文 Fig. 6b 半径曲线 NRMSE</div></div>
+        </div>
+      </section>
+
+      <section id="question">
+        <h2>复现问题</h2>
+        <p>目标论文为 Laghmach et al., <em>Phase field modelling of strain induced crystal growth in an elastic matrix</em>, J. Chem. Phys. 142, 244905 (2015)，DOI 10.1063/1.4923226。</p>
+        <p>核心问题不是“能否画出相似晶体”，而是当基体承受拉伸时，拓扑约束是否把弹性能推向扩散界面，并最终产生论文所报告的尺寸平台和临界拉伸比。</p>
+      </section>
+
+      <section id="workflow">
+        <h2>建模与审计</h2>
+        <ol class="workflow-list">
+          <li><strong>Equation audit：</strong>把论文式 (1)–(30) 映射到相场、位移、压力、拓扑位移和观测量。</li>
+          <li><strong>Consistency check：</strong>识别印刷势垒系数与自由能变分、解析界面及表面张力之间的矛盾，默认采用变分一致的 <code>−1/2</code>。</li>
+          <li><strong>Reference solver：</strong>先用可审计约化模型验证平台半径、拓扑开关、温度—拉伸阈值和网格/时间步收敛。</li>
+          <li><strong>COMSOL build：</strong>构建 <code>θ, ux, uy, P, utx, uty</code> 耦合模型，采用分离求解序列降低非线性耦合难度。</li>
+          <li><strong>Fail-closed review：</strong>缺失完整力学指标时保持 Partial，不以短时 smoke 或生成 MPH 代替最终验收。</li>
+        </ol>
+      </section>
+
+      <section id="evidence">
+        <h2>关键证据</h2>
+        <figure class="evidence-figure"><img src="../assets/cases/laghmach-radius.svg" alt="拓扑约束开启、关闭和论文图 6b 的晶体半径演化对比"><figcaption>约化模型的半径演化：拓扑约束开启后趋于平台；关闭后持续生长。论文 Fig. 6b 数字化曲线用于独立误差计算。</figcaption></figure>
+        <table>
+          <thead><tr><th>检查项</th><th>结果</th><th>门槛</th></tr></thead>
+          <tbody>
+            <tr><td>基准最终有效半径</td><td>23.00796 nm</td><td>22–25 nm</td></tr>
+            <tr><td>后期漂移 / 100 τ₁</td><td>0.03414%</td><td>&lt; 1%</td></tr>
+            <tr><td>关闭拓扑后的增长速度</td><td>0.51738 nm/τ₁</td><td>&gt; 0.05</td></tr>
+            <tr><td>0.5 / 1 nm 网格半径差</td><td>1.4132%</td><td>&lt; 3%</td></tr>
+            <tr><td>临界拉伸比 @ 298/303/308 K</td><td>3 / 4 / 5</td><td>3 / 4 / 5</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="gaps">
+        <h2>尚未关闭的验收缺口</h2>
+        <table>
+          <thead><tr><th>指标</th><th>当前状态</th><th>原因</th></tr></thead>
+          <tbody>
+            <tr><td><code>max |detF−1|</code></td><td>缺少权威长时结果</td><td>需要完整有限变形耦合解</td></tr>
+            <tr><td>平均 <code>σxx</code> 净下降</td><td>缺少权威结果</td><td>需要完整位移—压力耦合</td></tr>
+            <tr><td><code>σxx(t)</code> NRMSE</td><td>缺少权威结果</td><td>尚无完整 COMSOL 应力曲线</td></tr>
+            <tr><td>表面能拟合 B</td><td>误差 28.1%</td><td>超出 20% 门槛，不做参数硬调</td></tr>
+            <tr><td>表面能拟合 R²</td><td>0.84099</td><td>低于 0.98 门槛</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="limits">
+        <h2>为什么保留 Partial</h2>
+        <p>这个案例展示了 SimDog 所需的一条重要产品原则：算法可以发现机制，代码可以编译，短时模型也可以收敛，但只要完整验收指标没有形成证据，Controller 就不能把案例发布为“完整复现”。</p>
+      </section>
+    </article>
+
+    <aside class="case-sidebar">
+      <div class="side-card"><strong>本页导航</strong><a href="#outcome">结论</a><a href="#question">复现问题</a><a href="#workflow">建模与审计</a><a href="#evidence">关键证据</a><a href="#gaps">验收缺口</a><a href="#limits">结论边界</a></div>
+      <div class="side-card"><strong>案例信息</strong><dl class="definition-list"><dt>案例类型</dt><dd>论文复现</dd><dt>求解器</dt><dd>Reference solver + COMSOL 6.4</dd><dt>模型</dt><dd>相场 + 不可压有限变形</dd><dt>审查结果</dt><dd>Partial · 17/22</dd><dt>原始执行日期</dt><dd>2026-08-27</dd></dl></div>
+    </aside>
+  </main>
+
+  <footer><div class="container footer-inner"><span>SimDog Documentation</span><span><a href="../index.html">← 返回案例库</a></span></div></footer>
+</body>
+</html>
