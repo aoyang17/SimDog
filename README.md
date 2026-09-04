@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/simdog-logo.png" alt="SimDog" width="760">
+  <img src="assets/simdog-logo.png" alt="SimDog" width="380">
 </p>
 
 <p align="center">
