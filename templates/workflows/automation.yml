@@ -1,0 +1,19 @@
+schema_version: simdog.workflow.v1
+name: simulation-automation
+stages:
+  - id: specification
+    role: specification
+    objective: Define the existing model, parameter space, outputs, resources, and acceptance.
+    required_outputs: [task_spec.yml]
+  - id: automation
+    role: automation
+    objective: Define a bounded run matrix, controls, retries, and extraction plan.
+    required_outputs: [experiment_plan.yml]
+  - id: experiment
+    role: experiment
+    objective: Execute the run matrix and produce provenance-complete metrics.
+    required_outputs: [run_manifest.json, metrics.json]
+  - id: review
+    role: reviewer
+    objective: Audit completeness, failed runs, bias, convergence, and acceptance.
+    required_outputs: [review.json, review_report.md]

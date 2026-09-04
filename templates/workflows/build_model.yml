@@ -1,0 +1,23 @@
+schema_version: simdog.workflow.v1
+name: build-model
+stages:
+  - id: specification
+    role: specification
+    objective: Turn user intent into explicit model requirements and acceptance criteria.
+    required_outputs: [task_spec.yml]
+  - id: theory
+    role: theory
+    objective: Freeze equations, variables, units, parameters, and boundary conditions.
+    required_outputs: [model_spec.yml, equation_audit.md]
+  - id: build
+    role: builder
+    objective: Create the solver-native model and implementation mapping.
+    required_outputs: [implementation_manifest.json, build_report.md]
+  - id: experiment
+    role: experiment
+    objective: Run smoke tests, controls, and convergence checks.
+    required_outputs: [run_manifest.json, metrics.json]
+  - id: review
+    role: reviewer
+    objective: Independently verify model fidelity and numerical acceptance.
+    required_outputs: [review.json, review_report.md]

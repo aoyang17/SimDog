@@ -1,0 +1,69 @@
+{
+  "ok": true,
+  "probe": "distributed_ecm_legacy_validator",
+  "source_root": "/home/aobo/PaperEngine/Needs/distributed_ecm_debug",
+  "source_manifest": [
+    {
+      "path": "/home/aobo/PaperEngine/Needs/distributed_ecm_debug/DistributedECMFixed.java",
+      "size": 9427,
+      "sha256": "a03e5b3102b306663cea8f0eab209191ff518024adcfcbe90a0616fe3bca1ef5"
+    },
+    {
+      "path": "/home/aobo/PaperEngine/Needs/distributed_ecm_debug/comsol_fixed_surface_smoke.slurm",
+      "size": 1719,
+      "sha256": "d64faef62ef96a564ed49756cf4fea69479110acaedeb78df6b5496c1ce406d3"
+    },
+    {
+      "path": "/home/aobo/PaperEngine/Needs/distributed_ecm_debug/validate_smoke.py",
+      "size": 3658,
+      "sha256": "80570158112e60a0d5be45924994a2a07616126dffe363db43f3879bd1e02f5c"
+    },
+    {
+      "path": "/home/aobo/PaperEngine/Needs/distributed_ecm_debug/validate_capacity.py",
+      "size": 6597,
+      "sha256": "96c66b4cb1596b0bd0166ccb1124e487ee5e39d5b2470138fd90e10fc22eb619"
+    }
+  ],
+  "outcomes": [
+    {
+      "case": "reported_0p5c_pass",
+      "expected_acceptance": true,
+      "accepted": true,
+      "expectation_met": true,
+      "execution": {
+        "started_at": "2026-09-04T02:47:53.488058+00:00",
+        "duration_seconds": 0.05137281492352486,
+        "returncode": 0,
+        "stdout": "validation_status=PASS\nfinal_time_s=10\ncurrent_balance_tab_b9=5.293e-05\ncurrent_mapping_b9_b6=0\nv2_residual_V=0.000949\ninterface_voltage_residual_V=0.0005278\nmin_signed_C_rate=0\nmin_particle_average_SOC=0\nmax_particle_average_SOC=0.002764\n",
+        "stderr": "",
+        "outputs": [],
+        "execution_ok": true,
+        "errors": []
+      }
+    },
+    {
+      "case": "reported_1c_coarse_reject",
+      "expected_acceptance": false,
+      "accepted": false,
+      "expectation_met": true,
+      "execution": {
+        "started_at": "2026-09-04T02:47:53.539816+00:00",
+        "duration_seconds": 0.05167364701628685,
+        "returncode": 1,
+        "stdout": "validation_status=FAIL\nreason=algebraic residual failed: {'final_time_s': 10.0, 'current_balance_tab_b9': 5.292999999995107e-05, 'current_mapping_b9_b6': 0.0, 'v2_residual_V': 0.003753, 'interface_voltage_residual_V': 0.001948, 'min_signed_C_rate': 0.0, 'min_particle_average_SOC': 0.0, 'max_particle_average_SOC': 0.005704}\n",
+        "stderr": "",
+        "outputs": [],
+        "execution_ok": false,
+        "errors": [
+          "unexpected return code: 1"
+        ]
+      }
+    }
+  ],
+  "claims": {
+    "imports_paper_engine": false,
+    "modifies_source": false,
+    "runs_comsol": false,
+    "distinguishes_completion_from_acceptance": true
+  }
+}

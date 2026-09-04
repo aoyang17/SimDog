@@ -1,0 +1,28 @@
+schema_version: simdog.simulation-profile.v1
+simulation_id: distributed_ecm
+title: Distributed ECM COMSOL qualification
+workflow: model_debug
+connection: yeesuan-comsol
+workspace_root: workspaces/distributed_ecm
+remote_workdir: ~/simdog-runs/distributed_ecm
+source_files:
+  - name: distributedECMOriginal.java
+    source: /home/aobo/PaperEngine/simulations/distributedECM/distributedECMOriginal.java
+  - name: DistributedECMFixed.java
+    source: /home/aobo/PaperEngine/Needs/distributed_ecm_debug/DistributedECMFixed.java
+  - name: validate_smoke.py
+    source: /home/aobo/PaperEngine/Needs/distributed_ecm_debug/validate_smoke.py
+  - name: qualification_0p5c.slurm
+    source: project://simulations/distributed_ecm/slurm/qualification_0p5c.slurm
+qualification:
+  rate: 0.5
+  final_time_s: 10
+  expected_verdict: accepted
+  required_artifacts:
+    - fixed_0p5c_10s_built.mph
+    - fixed_0p5c_10s_solved.mph
+    - fixed_0p5c_10s_global.csv
+    - fixed_0p5c_10s_validation.txt
+    - fixed_0p5c_10s_manifest.sha256
+  clean_logs:
+    - fixed_0p5c_10s_comsol.log

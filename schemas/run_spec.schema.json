@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "simdog.run_spec.v1",
+  "type": "object",
+  "required": ["schema_version", "adapter", "execution"],
+  "properties": {
+    "schema_version": {"const": "simdog.run.v1"},
+    "adapter": {"type": "string", "minLength": 1},
+    "execution": {"type": "object"},
+    "expected_outputs": {"type": "array", "items": {"type": "string"}},
+    "acceptance": {"type": "array"}
+  }
+}

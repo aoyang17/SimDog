@@ -1,0 +1,8 @@
+schema_version: simdog.provider-config.v1
+kind: native-http-gateway
+provider_id: codex-gateway
+endpoint: https://agent-gateway.example/v1/simdog/execute
+secret_env: SIMDOG_CODEX_GATEWAY_TOKEN
+required_capabilities:
+  - structured_output
+  - tool_use

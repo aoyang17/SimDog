@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "simdog.comsol_run.v1",
+  "type": "object",
+  "required": ["schema_version", "action"],
+  "properties": {
+    "schema_version": {"const": "simdog.comsol-run.v1"},
+    "action": {"enum": ["compile-java", "batch-mph", "compile-and-batch-java"]},
+    "comsol_bin": {"type": "string", "minLength": 1},
+    "cwd": {"type": "string", "minLength": 1},
+    "java_source": {"type": "string"},
+    "class_file": {"type": "string"},
+    "input_model": {"type": "string"},
+    "batch_log": {"type": "string"},
+    "output_model": {"type": "string"},
+    "parameters": {"type": "object"},
+    "expected_outputs": {"type": "array", "items": {"type": "string"}},
+    "timeout_seconds": {"type": "number", "exclusiveMinimum": 0}
+  }
+}

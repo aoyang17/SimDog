@@ -1,0 +1,7 @@
+schema_version: simdog.ssh.v1
+host: cluster.example
+user: simdog-runner
+port: 22
+identity_file: /secure/external/path/simdog_ed25519
+known_hosts_file: /secure/external/path/known_hosts
+remote_helper: /opt/simdog/bin/simdog-remote

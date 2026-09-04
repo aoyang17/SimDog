@@ -1,0 +1,14 @@
+schema_version: simdog.remote-policy.v1
+allowed_roots:
+  - /srv/simdog-runs
+allowed_executables:
+  - sbatch
+  - sacct
+  - scancel
+  - test
+  - grep
+  - sha256sum
+  - comsol
+allowed_environment:
+  - OMP_NUM_THREADS
+max_timeout_seconds: 86400

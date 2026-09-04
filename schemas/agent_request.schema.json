@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "simdog.agent_request.v1",
+  "type": "object",
+  "required": ["protocol_version", "request_id", "workflow_id", "role", "objective", "inputs", "outputs"],
+  "properties": {
+    "protocol_version": {"const": "simdog.agent.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "workflow_id": {"type": "string", "minLength": 1},
+    "role": {"type": "string", "minLength": 1},
+    "objective": {"type": "string", "minLength": 1},
+    "inputs": {"type": "array"},
+    "outputs": {"type": "array"},
+    "constraints": {"type": "object"},
+    "budget": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "simdog.agent_response.v1",
+  "type": "object",
+  "required": ["protocol_version", "request_id", "status", "provider", "artifacts"],
+  "properties": {
+    "protocol_version": {"const": "simdog.agent.v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["completed", "blocked", "failed"]},
+    "provider": {"type": "object"},
+    "artifacts": {"type": "array"},
+    "events": {"type": "array"},
+    "usage": {"type": "object"},
+    "error": {"type": ["object", "null"]}
+  },
+  "additionalProperties": false
+}

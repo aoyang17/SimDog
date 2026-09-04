@@ -1,0 +1,16 @@
+schema_version: simdog.gateway-ssh.v1
+connection_id: comsol-gateway
+ssh:
+  host: comsol-gateway.example.org
+  port: 22
+  user: researcher
+  strict_host_key_checking: true
+gateway:
+  instance_selection: "1"
+  instance_id: optional-stable-instance-id
+authentication:
+  kind: password_file
+  password_file: /secure/external/path/comsol_ssh_password
+remote:
+  environment_script: ~/apps/comsol64_env.sh
+  work_root: ~/simdog-runs

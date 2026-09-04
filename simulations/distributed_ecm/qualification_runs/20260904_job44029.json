@@ -1,0 +1,52 @@
+{
+  "schema_version": "simdog.qualification-record.v1",
+  "simulation_id": "distributed_ecm",
+  "run_id": "qual_0p5c_20260904",
+  "connection_id": "yeesuan-comsol",
+  "solver": {
+    "name": "COMSOL Multiphysics",
+    "version": "6.4.0.293"
+  },
+  "scheduler": {
+    "name": "Slurm",
+    "version": "23.11.8",
+    "job_id": "44029",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:12:50"
+  },
+  "case": {
+    "c_rate": 0.5,
+    "final_time_s": 10,
+    "constraint": "weak",
+    "branch": "signed",
+    "max_step_s": 0.02
+  },
+  "input_snapshots": {
+    "distributedECMOriginal.java": "68ef1f37ee3cae1b0e6122eed019cfcc328ee34145cdc24bf41289c9c7ebe86e",
+    "DistributedECMFixed.java": "a03e5b3102b306663cea8f0eab209191ff518024adcfcbe90a0616fe3bca1ef5",
+    "validate_smoke.py": "80570158112e60a0d5be45924994a2a07616126dffe363db43f3879bd1e02f5c",
+    "qualification_0p5c.slurm": "c7c34add3324b4eb40dea019e1c18f763ebc2416754fd56c15a9f9782e6d8844"
+  },
+  "validation": {
+    "status": "PASS",
+    "final_time_s": 10.0,
+    "current_balance_tab_b9": 0.0000529267302873,
+    "current_mapping_b9_b6": 7.1054273576e-16,
+    "v2_residual_V": 0.000949046576534,
+    "interface_voltage_residual_V": 0.000527754630923,
+    "min_signed_C_rate": 4.34196076662e-14,
+    "min_particle_average_SOC": 1.50676024402e-24,
+    "max_particle_average_SOC": 0.00276379871876
+  },
+  "artifacts": {
+    "fixed_0p5c_10s_built.mph": "e2426f0d6146bd0d35432cca7a743e7c33dec51b37062ebce73b33819fd95de2",
+    "fixed_0p5c_10s_solved.mph": "bd938c424ae8a7db786a1e38825305a37b66e390b4aa907c0964ebe6b8865ab6",
+    "fixed_0p5c_10s_global.csv": "10819b8d5837600908b75945c3ddec7d8c695df6f23f533dd9a5f7220074b59f",
+    "fixed_0p5c_10s_validation.txt": "8e9f9d250960cf32efc21432ab34cb431fd3792600238c2c6279ac81d7c2008d",
+    "fixed_0p5c_10s_manifest.sha256": "2ed376836a46aadb3e726260994a6a16e2815ab895e683ad04ed0783dbebc0a6",
+    "fixed_0p5c_10s_comsol.log": "d4e6684c0579d0b326515dc265a6ba83d276662277adc5e3027ab9d3a3ff596d"
+  },
+  "verdict": "accepted",
+  "scope": "Short 0.5C/10s numerical qualification only; known spherical-inventory and collector-conductivity decisions remain unresolved for long-duration physical qualification."
+}

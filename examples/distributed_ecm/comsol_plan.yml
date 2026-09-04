@@ -1,0 +1,22 @@
+schema_version: simdog.comsol-run.v1
+action: compile-and-batch-java
+comsol_bin: comsol
+cwd: .
+java_source: DistributedECMFixed.java
+class_file: DistributedECMFixed.class
+batch_log: fixed_0p5c_10s_comsol.log
+nosave: true
+parameters:
+  prefix: fixed_0p5c_10s
+  branch: signed
+  constraint: weak
+  C_rate: 0.5
+  ramp_time: 1[s]
+  t_final: 10[s]
+  dt_out: 0.1[s]
+  max_step: 0.02[s]
+expected_outputs:
+  - fixed_0p5c_10s_built.mph
+  - fixed_0p5c_10s_solved.mph
+  - fixed_0p5c_10s_global.csv
+timeout_seconds: 7200

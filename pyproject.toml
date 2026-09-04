@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simdog"
+version = "0.1.0"
+description = "Provider-neutral, solver-neutral simulation engineering controller"
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6", "pexpect>=4.8; platform_system != 'Windows'"]
+
+[project.optional-dependencies]
+test = []
+
+[project.scripts]
+simdog = "simdog.cli:main"
+simdog-remote = "simdog.remote_helper:main"
+
+[project.entry-points."simdog.agent_providers"]
+recording = "simdog.providers.recording:RecordingProvider"
+
+[project.entry-points."simdog.solver_adapters"]
+command = "simdog.adapters.command:CommandAdapter"
+comsol = "simdog.adapters.comsol:ComsolAdapter"
+
+[tool.setuptools.packages.find]
+where = ["src"]

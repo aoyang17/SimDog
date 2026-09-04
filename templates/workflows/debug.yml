@@ -1,0 +1,23 @@
+schema_version: simdog.workflow.v1
+name: model-debug
+stages:
+  - id: inspect
+    role: specification
+    objective: Snapshot the model and classify observed failures without modifying it.
+    required_outputs: [observation.json, model_inventory.json]
+  - id: diagnose
+    role: debug
+    objective: Produce falsifiable root-cause hypotheses and minimal diagnostic experiments.
+    required_outputs: [hypotheses.json, diagnostic_plan.yml]
+  - id: patch
+    role: builder
+    objective: Implement the smallest justified patch and preserve a model diff.
+    required_outputs: [patch.json, implementation_manifest.json]
+  - id: experiment
+    role: experiment
+    objective: Run before/after, negative-control, and regression validation.
+    required_outputs: [run_manifest.json, metrics.json]
+  - id: review
+    role: reviewer
+    objective: Independently decide whether the root cause and repair are established.
+    required_outputs: [review.json, review_report.md]

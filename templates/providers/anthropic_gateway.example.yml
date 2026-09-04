@@ -1,0 +1,7 @@
+schema_version: simdog.provider-config.v1
+kind: native-http-gateway
+provider_id: anthropic-gateway
+endpoint: https://agent-gateway.example/v1/simdog/execute
+secret_env: SIMDOG_ANTHROPIC_GATEWAY_TOKEN
+required_capabilities:
+  - structured_output

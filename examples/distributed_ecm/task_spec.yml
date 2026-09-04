@@ -1,0 +1,31 @@
+schema_version: simdog.task.v1
+task_id: distributed-ecm-debug
+mode: model_debug
+title: Distributed ECM initialization and physical-consistency debug
+source:
+  kind: external_legacy_project
+  root: /home/aobo/PaperEngine/Needs/distributed_ecm_debug
+objectives:
+  - preserve the existing electrochemical and weak-form model unless evidence requires a physics revision
+  - reach the declared final time without time-stepping or nonlinear failures
+  - distinguish numerical completion from algebraic and conservation acceptance
+acceptance:
+  - id: current-balance
+    metric: current_balance_tab_b9
+    operator: <=
+    expected: 0.0001
+  - id: mapped-current
+    metric: current_mapping_b9_b6
+    operator: <=
+    expected: 0.0001
+  - id: algebraic-voltage
+    metric: v2_residual_V
+    operator: <=
+    expected: 0.001
+  - id: interface-voltage
+    metric: interface_voltage_residual_V
+    operator: <=
+    expected: 0.001
+known_model_blockers:
+  - spherical inventory is inconsistent with the unweighted radial weak form
+  - collector conductivity requires domain-owner confirmation
